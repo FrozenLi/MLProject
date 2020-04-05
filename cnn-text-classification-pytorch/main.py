@@ -96,6 +96,9 @@ elif args.model_type == 'gatecnn':
 elif args.model_type =='lstm':
     print("current model is lstm")
     cnn = model.LSTMClassifier(args)
+elif args.model_type =='gatecnn_tanh':
+    print("current model is gatecnn with tanh")
+    cnn = model.GatedCNN_tanh(args)
 else:
     cnn = model.CNN_Text(args)
 
