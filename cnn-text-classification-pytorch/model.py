@@ -156,11 +156,11 @@ class LSTMClassifier(nn.Module):
 		
 		"""
 		
-		self.batch_size = batch_size
-		self.output_size = output_size
+		self.batch_size = args.batch-size
+		self.output_size = args.class_num
 		self.hidden_size = hidden_size
-		self.vocab_size = vocab_size
-		self.embedding_length = embedding_length
+		self.vocab_size = args.embed_num
+		self.embedding_length = args.embed_dim
 		
 		self.word_embeddings = nn.Embedding(vocab_size, embedding_length)# Initializing the look-up table.
 		self.word_embeddings.weight = nn.Parameter(weights, requires_grad=False) # Assigning the look-up table to the pre-trained GloVe word embedding.
