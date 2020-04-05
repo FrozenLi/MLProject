@@ -25,6 +25,11 @@ def train(train_iter, dev_iter, model, args):
             if args.cuda:
                 feature, target = feature.cuda(), target.cuda()
 
+            #only for lstm
+            if args.model_type =='lstm' and feature.size(0) != args.batch_size:
+                print("train data shape not correct[for lstm]",feature.size())
+                continue
+
             optimizer.zero_grad()
             logit = model(feature)
 
@@ -46,6 +51,8 @@ def train(train_iter, dev_iter, model, args):
                                                                              batch.batch_size))
             if steps % args.test_interval == 0:
                 dev_acc = eval(dev_iter, model, args)
+                #set model back to train mode
+                model.train()
                 if dev_acc > best_acc:
                     best_acc = dev_acc
                     last_step = steps
@@ -56,6 +63,10 @@ def train(train_iter, dev_iter, model, args):
                         print('early stop by {} steps.'.format(args.early_stop))
             elif steps % args.save_interval == 0:
                 save(model, args.save_dir, 'snapshot', steps)
+    #final eval
+    dev_acc = eval(dev_iter, model, args)
+    print('current acc',dev_acc)
+    print('best acc',best_acc)
 
 
 def eval(data_iter, model, args):
@@ -65,6 +76,10 @@ def eval(data_iter, model, args):
         feature, target = batch.text, batch.label
         feature = feature.data.t()
         target = target.data.sub(1)  # batch first, index align
+        if feature.size(0)!=args.batch_size:
+            print("eval data shape not correct",feature.size())
+            continue
+
         if args.cuda:
             feature, target = feature.cuda(), target.cuda()
 
