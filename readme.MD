@@ -10,3 +10,5 @@ The main script is under cnn-text-classification-pytorch
 python main.py 
 #gateCNN
 python main.py -model_type=gatecnn
+
+This project is for CS5339.
